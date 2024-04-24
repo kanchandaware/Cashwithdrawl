@@ -1,8 +1,5 @@
 package testpackage;
 
-
-
-
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -12,39 +9,46 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import atmProj.CashWithdrawl;
+
 public class CashwithdrawlTest {
-    private CashWithdrawl atm;
+    private CashWithdrawl CashWithdrawl;
 
     @Before
     public void setUp() {
-        atm = new ATM();
+    	CashWithdrawl = new CashWithdrawl();
     }
 
     @Test
-    public void testWithdrawSuccessful() {
-        assertTrue(atm.withdraw(50));
+    public void testWithdrawWithSuccess() {
+        assertTrue(CashWithdrawl.withdrawCashFromATM(500));
     }
 
     @Test
-    public void testWithdrawAmountNotMultipleOf10() {
-        assertFalse(atm.withdraw(55));
+    public void testWithdrawAmounIfmultipleOfTen() {
+        assertFalse(CashWithdrawl.withdrawCashFromATM(45));
     }
 
     @Test
-    public void testWithdrawInsufficientFunds() {
-        ATM atmSpy = spy(atm);
+    public void testIfInsufficientFunds() {
+    	CashWithdrawl cash = spy(CashWithdrawl.class);
         Map<Integer, Integer> bankNotes = new HashMap<>();
-        bankNotes.put(10, 1);
-        doReturn(bankNotes).when(atmSpy).getBankNotes();
-        assertFalse(atmSpy.withdraw(20));
+        bankNotes.put(20, 1);
+        doReturn(bankNotes).when(cash).getBankNotes();
+        cash.getBankNotes(bankNotes);
+
+        assertFalse(cash.withdrawCashFromATM(20));
     }
 
     @Test
-    public void testWithdrawUnsuccessfulDueToDenominations() {
-        ATM atmSpy = spy(atm);
+    public void testWithdrawForDenominations() {
+    	CashWithdrawl cashAmount = spy(CashWithdrawl.class);
+    	
         Map<Integer, Integer> bankNotes = new HashMap<>();
-        bankNotes.put(10, 1);
-        doReturn(bankNotes).when(atmSpy).getBankNotes();
-        assertFalse(atmSpy.withdraw(15));
+        bankNotes.put(20, 1);
+        
+        doReturn(bankNotes).when(cashAmount).getBankNotes();
+        cashAmount.getBankNotes(bankNotes);
+        assertFalse(cashAmount.withdrawCashFromATM(15));
     }
 }

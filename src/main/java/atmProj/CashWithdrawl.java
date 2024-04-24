@@ -12,26 +12,25 @@ import java.util.HashMap;
 public class CashWithdrawl {
 
 
-    private Map<Integer, Integer> bankNotes;
+    private Map<Integer, Integer> bankCurrency;
 
     public CashWithdrawl() {
-        bankNotes = new HashMap<>();
-        // Initialize the ATM with some bank notes
-        bankNotes.put(10, 100);
-        bankNotes.put(20, 100);
-        bankNotes.put(50, 100);
-        bankNotes.put(100, 100);
-        // Add more denominations if needed
+    	bankCurrency = new HashMap<>();
+    	bankCurrency.put(10, 100);
+    	bankCurrency.put(20, 50);
+    	bankCurrency.put(50, 100);
+    	bankCurrency.put(100, 100);
     }
 
-    public synchronized boolean withdraw(int amount) {
+    public synchronized boolean withdrawCashFromATM(int amount)
+    {
         if (amount % 10 != 0) {
             System.out.println("Amount must be a multiple of 10");
             return false;
         }
 
-        if (!isAmountAvailable(amount)) {
-            System.out.println("Insufficient funds in the ATM");
+        if (!checkIfAmountAvailable(amount)) {
+            System.out.println("Insufficient funds for cash withdrawl in the ATM");
             return false;
         }
 
@@ -41,15 +40,15 @@ public class CashWithdrawl {
             return false;
         }
 
-        updateATM(withdrawalNotes);
+        updateDenominationInAtm(withdrawalNotes);
         System.out.println("Dispensed amount: " + amount);
         return true;
     }
 
-    private boolean isAmountAvailable(int amount) {
+    private boolean checkIfAmountAvailable(int amount) {
         int totalAvailable = 0;
-        for (int denomination : bankNotes.keySet()) {
-            totalAvailable += denomination * bankNotes.get(denomination);
+        for (int denomination : bankCurrency.keySet()) {
+            totalAvailable = totalAvailable+denomination * bankCurrency.get(denomination);
         }
         return totalAvailable >= amount;
     }
@@ -58,11 +57,11 @@ public class CashWithdrawl {
         Map<Integer, Integer> withdrawalNotes = new HashMap<>();
         int remainingAmount = amount;
 
-        for (int denomination : bankNotes.keySet()) {
+        for (int denomination : bankCurrency.keySet()) {
             int notesNeeded = remainingAmount / denomination;
-            if (notesNeeded > 0 && bankNotes.get(denomination) >= notesNeeded) {
+            if (notesNeeded > 0 && bankCurrency.get(denomination) >= notesNeeded) {
                 withdrawalNotes.put(denomination, notesNeeded);
-                remainingAmount -= denomination * notesNeeded;
+                remainingAmount =remainingAmount- denomination * notesNeeded;
             }
         }
 
@@ -73,18 +72,15 @@ public class CashWithdrawl {
         }
     }
 
-    private void updateATM(Map<Integer, Integer> withdrawalNotes) {
+    private void updateDenominationInAtm(Map<Integer, Integer> withdrawalNotes) {
         for (int denomination : withdrawalNotes.keySet()) {
-            bankNotes.put(denomination, bankNotes.get(denomination) - withdrawalNotes.get(denomination));
+        	bankCurrency.put(denomination, bankCurrency.get(denomination) - withdrawalNotes.get(denomination));
         }
     }
     public static void main(String[] args) {
-    	CashWithdrawl atm = new CashWithdrawl();
-
-        // Example usage: Withdrawal of $50
-        atm.withdraw(50);
+    	CashWithdrawl cashWithdrawl = new CashWithdrawl();
+    	cashWithdrawl.withdrawCashFromATM(5000);
     }
 
-    // Unit tests can be added here
 }
 
