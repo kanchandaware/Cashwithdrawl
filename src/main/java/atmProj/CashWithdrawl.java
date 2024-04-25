@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class CashWithdrawl {
 
 
-    private Map<Integer, Integer> bankCurrency;
+    public Map<Integer, Integer> bankCurrency;
 
     public CashWithdrawl() {
     	bankCurrency = new HashMap<>();
