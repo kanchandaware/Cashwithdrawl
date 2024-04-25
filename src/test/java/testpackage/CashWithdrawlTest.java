@@ -28,6 +28,10 @@ public class CashWithdrawlTest {
         cashWithdrawl.bankCurrency = mockBankCurrency;
 
         assertFalse(cashWithdrawl.withdrawCashFromATM(100));
+        assertFalse(cashWithdrawl.withdrawCashFromATM(0)); 
+        assertFalse(cashWithdrawl.withdrawCashFromATM(-100)); 
+        assertFalse(cashWithdrawl.withdrawCashFromATM(2000)); 
+        assertTrue(cashWithdrawl.withdrawCashFromATM(1000));
     }
 
     @Test
